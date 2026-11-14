@@ -4,11 +4,12 @@ Define toda la interfaz gráfica con Tkinter.
 No contiene lógica de negocio; sólo renderiza y expone callbacks.
 """
 
-import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import *
+from tkinter import ttk
+from tkinter import messagebox
 
 
-class InventarioView(tk.Tk):
+class InventarioView(Tk):
     """Ventana principal del sistema de inventario."""
 
     # ──────────────────────────────────────────
@@ -20,88 +21,77 @@ class InventarioView(tk.Tk):
         self.title("📦 Sistema de Inventario")
         self.geometry("820x540")
         self.resizable(False, False)
-        self.configure(bg="#f0f0f0")
 
         self._construir_widgets()
 
     def _construir_widgets(self) -> None:
         # ── Título ──────────────────────────────
-        tk.Label(self, text="Sistema de Inventario", font=("Helvetica", 18, "bold"),
-                 bg="#f0f0f0", fg="#333").pack(pady=(14, 4))
+        ttk.Label(self, text="Sistema de Inventario", font=("Helvetica", 18, "bold")).pack(pady=(14, 4))
 
         # ── Frame principal ─────────────────────
-        frame_main = tk.Frame(self, bg="#f0f0f0")
+        frame_main = ttk.Frame(self)
         frame_main.pack(fill="both", expand=True, padx=16, pady=4)
 
         # ── Panel izquierdo: formulario ─────────
-        self._frame_form = tk.LabelFrame(frame_main, text="Datos del Producto",
-                                         bg="#f0f0f0", font=("Helvetica", 10, "bold"),
-                                         padx=10, pady=10)
+        self._frame_form = ttk.LabelFrame(frame_main, text="Datos del Producto", padding=10)
         self._frame_form.pack(side="left", fill="y", padx=(0, 12))
 
         # Campo ID (oculto / solo lectura)
-        self._id_var = tk.StringVar()
+        self._id_var = StringVar()
 
         # Nombre
-        tk.Label(self._frame_form, text="Nombre:", bg="#f0f0f0").grid(
+        ttk.Label(self._frame_form, text="Nombre:").grid(
             row=0, column=0, sticky="w", pady=4)
-        self._nombre_var = tk.StringVar()
-        self._entry_nombre = tk.Entry(self._frame_form, textvariable=self._nombre_var, width=22)
+        self._nombre_var = StringVar()
+        self._entry_nombre = ttk.Entry(self._frame_form, textvariable=self._nombre_var, width=22)
         self._entry_nombre.grid(row=0, column=1, padx=6, pady=4)
 
         # Cantidad
-        tk.Label(self._frame_form, text="Cantidad:", bg="#f0f0f0").grid(
+        ttk.Label(self._frame_form, text="Cantidad:").grid(
             row=1, column=0, sticky="w", pady=4)
-        self._cantidad_var = tk.StringVar()
-        tk.Entry(self._frame_form, textvariable=self._cantidad_var, width=22).grid(
-            row=1, column=1, padx=6, pady=4)
+        self._cantidad_var = StringVar()
+        self._entry_cantidad = ttk.Entry(self._frame_form, textvariable=self._cantidad_var, width=22)
+        self._entry_cantidad.grid(row=1, column=1, padx=6, pady=4)
 
         # Precio
-        tk.Label(self._frame_form, text="Precio ($):", bg="#f0f0f0").grid(
+        ttk.Label(self._frame_form, text="Precio ($):").grid(
             row=2, column=0, sticky="w", pady=4)
-        self._precio_var = tk.StringVar()
-        tk.Entry(self._frame_form, textvariable=self._precio_var, width=22).grid(
-            row=2, column=1, padx=6, pady=4)
+        self._precio_var = StringVar()
+        self._entry_precio = ttk.Entry(self._frame_form, textvariable=self._precio_var, width=22)
+        self._entry_precio.grid(row=2, column=1, padx=6, pady=4)
 
         # ── Botones CRUD ────────────────────────
-        frame_botones = tk.Frame(self._frame_form, bg="#f0f0f0")
+        frame_botones = ttk.Frame(self._frame_form)
         frame_botones.grid(row=3, column=0, columnspan=2, pady=12)
 
-        self._btn_agregar  = tk.Button(frame_botones, text="➕ Agregar",  width=12,
-                                       bg="#4CAF50", fg="white", relief="flat", cursor="hand2")
+        self._btn_agregar = ttk.Button(frame_botones, text="Agregar", width=12, cursor="hand2")
         self._btn_agregar.grid(row=0, column=0, padx=4, pady=4)
 
-        self._btn_actualizar = tk.Button(frame_botones, text="✏️ Actualizar", width=12,
-                                          bg="#2196F3", fg="white", relief="flat", cursor="hand2",
-                                          state="disabled")
+        self._btn_actualizar = ttk.Button(frame_botones, text="Actualizar", width=12,
+                                          cursor="hand2", state="disabled")
         self._btn_actualizar.grid(row=0, column=1, padx=4, pady=4)
 
-        self._btn_eliminar = tk.Button(frame_botones, text="🗑️ Eliminar",  width=12,
-                                        bg="#f44336", fg="white", relief="flat", cursor="hand2",
-                                        state="disabled")
+        self._btn_eliminar = ttk.Button(frame_botones, text="Eliminar", width=12,
+                                        cursor="hand2", state="disabled")
         self._btn_eliminar.grid(row=1, column=0, padx=4, pady=4)
 
-        self._btn_limpiar  = tk.Button(frame_botones, text="🔄 Limpiar",  width=12,
-                                        bg="#9E9E9E", fg="white", relief="flat", cursor="hand2")
+        self._btn_limpiar = ttk.Button(frame_botones, text="Limpiar", width=12, cursor="hand2")
         self._btn_limpiar.grid(row=1, column=1, padx=4, pady=4)
 
         # ── Panel derecho: lista + búsqueda ─────
-        frame_derecho = tk.Frame(frame_main, bg="#f0f0f0")
+        frame_derecho = ttk.Frame(frame_main)
         frame_derecho.pack(side="left", fill="both", expand=True)
 
         # Búsqueda
-        frame_busqueda = tk.Frame(frame_derecho, bg="#f0f0f0")
+        frame_busqueda = ttk.Frame(frame_derecho)
         frame_busqueda.pack(fill="x", pady=(0, 6))
-        tk.Label(frame_busqueda, text="🔍 Buscar:", bg="#f0f0f0").pack(side="left")
-        self._busqueda_var = tk.StringVar()
-        tk.Entry(frame_busqueda, textvariable=self._busqueda_var, width=28).pack(
-            side="left", padx=6)
-        self._btn_buscar = tk.Button(frame_busqueda, text="Buscar",
-                                      bg="#FF9800", fg="white", relief="flat", cursor="hand2")
+        ttk.Label(frame_busqueda, text="Buscar:").pack(side="left")
+        self._busqueda_var = StringVar()
+        self._entry_busqueda = ttk.Entry(frame_busqueda, textvariable=self._busqueda_var, width=28)
+        self._entry_busqueda.pack(side="left", padx=6)
+        self._btn_buscar = ttk.Button(frame_busqueda, text="Buscar", cursor="hand2")
         self._btn_buscar.pack(side="left", padx=2)
-        self._btn_mostrar_todos = tk.Button(frame_busqueda, text="Ver todos",
-                                             bg="#607D8B", fg="white", relief="flat",
-                                             cursor="hand2")
+        self._btn_mostrar_todos = ttk.Button(frame_busqueda, text="Ver todos", cursor="hand2")
         self._btn_mostrar_todos.pack(side="left", padx=2)
 
         # Tabla (Treeview)
@@ -115,15 +105,15 @@ class InventarioView(tk.Tk):
         self._tree.column("Precio",   width=100, anchor="e")
 
         scrollbar = ttk.Scrollbar(frame_derecho, orient="vertical",
-                                   command=self._tree.yview)
+                                  command=self._tree.yview)
         self._tree.configure(yscrollcommand=scrollbar.set)
         self._tree.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="left", fill="y")
 
         # ── Barra de estado ─────────────────────
-        self._estado_var = tk.StringVar(value="Listo.")
-        tk.Label(self, textvariable=self._estado_var, relief="sunken",
-                 anchor="w", bg="#ddd", font=("Helvetica", 9)).pack(
+        self._estado_var = StringVar(value="Listo.")
+        ttk.Label(self, textvariable=self._estado_var, relief="sunken",
+                  anchor="w", font=("Helvetica", 9)).pack(
             fill="x", side="bottom", padx=0, pady=0)
 
     # ──────────────────────────────────────────
@@ -159,14 +149,14 @@ class InventarioView(tk.Tk):
         self._limpiar_tabla()
         for p in productos:
             self._tree.insert("", "end",
-                               values=(p.id, p.nombre, p.cantidad, f"${p.precio:.2f}"))
+                              values=(p.id, p.nombre, p.cantidad, f"${p.precio:.2f}"))
 
     def _limpiar_tabla(self) -> None:
         for item in self._tree.get_children():
             self._tree.delete(item)
 
     def rellenar_formulario(self, producto_id: str, nombre: str,
-                             cantidad: str, precio: str) -> None:
+                            cantidad: str, precio: str) -> None:
         """Pone los datos de un producto en el formulario para edición."""
         self._id_var.set(producto_id)
         self._nombre_var.set(nombre)
